@@ -1,5 +1,5 @@
-import java.awt.*;
-import java.io.PrintWriter;
+package lab2;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +102,7 @@ public class DBManager {
 
     public boolean editPatient(int id, String name, Boolean isSick, String sickness, String treatment) {
         String sql = "UPDATE patient " +
-                "SET " +
-                "WHERE id = " + id;
+                "SET ";
 
         if (name == null && isSick == null && sickness == null && treatment == null)
             return false;
@@ -132,7 +131,7 @@ public class DBManager {
             sql += "treatment = " + treatment;
         }
 
-        sql += " WHERE patient_pkey = " + id;
+        sql += " WHERE id = " + id;
 
         try
         {
@@ -180,7 +179,6 @@ public class DBManager {
             rs.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
 
@@ -224,6 +222,7 @@ public class DBManager {
                 Doctor doctor = new Doctor();
                 doctor.id = rs.getInt("id");
                 doctor.name = rs.getString("name");
+                doctors.add(doctor);
             }
             rs.close();
 
