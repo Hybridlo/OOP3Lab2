@@ -1,12 +1,6 @@
 <%@ page import="lab2.Doctor" %>
 <%@ page import="lab2.Patient" %>
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 07.06.2020
-  Time: 17:57
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

@@ -23,6 +23,10 @@ public class DBManager {
         return instance;
     }
 
+    public Statement getStatement() {
+        return stmt;
+    }
+
     public Patient getPatientById(int id) {
         String sql = "SELECT * " +
                 "FROM patient P1 " +
@@ -153,10 +157,10 @@ public class DBManager {
         }
     }
 
-    public boolean addPatient(String name, boolean isSick, String sickness, String treatment) {
+    public boolean addPatient(String name, boolean isSick, String sickness, String treatment, String sicknessHistory) {
         String sql = "INSERT INTO patient " +
-                "(name, isSick, sickness, treatment) " +
-                "VALUES ('" + name + "', " + isSick + ", '" + sickness + "', '" + treatment + "')";
+                "(name, isSick, sickness, treatment, sickness_history) " +
+                "VALUES ('" + name + "', " + isSick + ", '" + sickness + "', '" + treatment + "', '" + sicknessHistory + "')";
 
         try
         {
