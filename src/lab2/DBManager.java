@@ -39,6 +39,7 @@ public class DBManager {
                 patient.isSick = rs.getBoolean("isSick");
                 patient.sickness = rs.getString("sickness");
                 patient.treatment = rs.getString("treatment");
+                patient.sicknessHistory = rs.getString("sickness_history");
             } else {
                 return null;
             }
@@ -100,7 +101,7 @@ public class DBManager {
         return doctor;
     }
 
-    public boolean editPatient(int id, String name, Boolean isSick, String sickness, String treatment) {
+    public boolean editPatient(int id, String name, Boolean isSick, String sickness, String treatment, String sicknessHistory) {
         String sql = "UPDATE patient " +
                 "SET ";
 
@@ -109,26 +110,35 @@ public class DBManager {
 
         boolean set = false;
         if (name != null) {
-            sql += "name = " + name;
+            sql += "name = '" + name + "'";
             set = true;
         }
 
-        if (set) sql += ", ";
-
         if (isSick != null) {
-            sql += "isSick = " + isSick;
-        }
+            if (set) sql += ", ";
 
-        if (set) sql += ", ";
+            sql += "isSick = " + isSick;
+            set = true;
+        }
 
         if (sickness != null) {
-            sql += "sickness = " + sickness;
+            if (set) sql += ", ";
+
+            sql += "sickness = '" + sickness + "'";
+            set = true;
         }
 
-        if (set) sql += ", ";
-
         if (treatment != null) {
-            sql += "treatment = " + treatment;
+            if (set) sql += ", ";
+
+            sql += "treatment = '" + treatment + "'";
+            set = true;
+        }
+
+        if (sicknessHistory != null) {
+            if (set) sql += ", ";
+
+            sql += "sickness_history = '" + sicknessHistory + "'";
         }
 
         sql += " WHERE id = " + id;
@@ -174,6 +184,7 @@ public class DBManager {
                 patient.isSick = rs.getBoolean("isSick");
                 patient.sickness = rs.getString("sickness");
                 patient.treatment = rs.getString("treatment");
+                patient.sicknessHistory = rs.getString("sickness_history");
                 patients.add(patient);
             }
             rs.close();
@@ -235,7 +246,7 @@ public class DBManager {
 
     public List<Patient> getSickPatients() {
         String sql = "SELECT id, * FROM patient P1" +
-                "WHERE P1.isSick = true";
+                " WHERE P1.isSick = true";
 
         List<Patient> patients = new ArrayList<>();
 
@@ -250,6 +261,36 @@ public class DBManager {
                 patient.isSick = rs.getBoolean("isSick");
                 patient.sickness = rs.getString("sickness");
                 patient.treatment = rs.getString("treatment");
+                patient.sicknessHistory = rs.getString("sickness_history");
+                patients.add(patient);
+            }
+            rs.close();
+
+        } catch (SQLException e) {
+            return null;
+        }
+
+        return patients;
+    }
+
+    public List<Patient> getPatientsToTreat() {
+        String sql = "SELECT id, * FROM patient P1 " +
+                "WHERE CHAR_LENGTH(P1.treatment) > 0";
+
+        List<Patient> patients = new ArrayList<>();
+
+        try
+        {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                Patient patient = new Patient();
+                patient.id = rs.getInt("id");
+                patient.name = rs.getString("name");
+                patient.isSick = rs.getBoolean("isSick");
+                patient.sickness = rs.getString("sickness");
+                patient.treatment = rs.getString("treatment");
+                patient.sicknessHistory = rs.getString("sickness_history");
                 patients.add(patient);
             }
             rs.close();

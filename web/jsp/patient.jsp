@@ -18,12 +18,14 @@
 
             if (!patient.isSick) {
                 out.println("<form method='post'>");
-                out.println("<input type='submit' value='Make sick'>");
+                out.println("<button type='submit'>Make sick</button>");
                 out.println("</form>");
             }
         } else {
             out.println("Patient not found");
         }
     %>
+
+    <a href="./">Go back</a>
 </body>
 </html>

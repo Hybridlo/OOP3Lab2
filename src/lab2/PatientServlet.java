@@ -16,7 +16,7 @@ public class PatientServlet extends HttpServlet {
         getServletContext().getRequestDispatcher("/jsp/people.jsp").forward(request, response);
     }
 
-    private void select(HttpServletRequest request, HttpServletResponse response, DBManager db, int id)
+    private void selected(HttpServletRequest request, HttpServletResponse response, DBManager db, int id)
             throws ServletException, IOException {
 
         Patient currPatient = db.getPatientById(id);
@@ -36,7 +36,7 @@ public class PatientServlet extends HttpServlet {
         String id = request.getParameter("id");
 
         if (id != null && Integer.parseInt(id) > 0)
-            select(request, response, db, Integer.parseInt(id));
+            selected(request, response, db, Integer.parseInt(id));
 
         choose(request, response, db);
     }
@@ -53,11 +53,10 @@ public class PatientServlet extends HttpServlet {
         Patient currPatient = db.getPatientById(Integer.parseInt(id));
         if (currPatient != null) {
             currPatient.isSick = true;
-            db.editPatient(currPatient.id, null, true, null, null);
+            db.editPatient(currPatient.id, null, true, null, null, null);
         }
 
-        request.setAttribute("patient", currPatient);
-        getServletContext().getRequestDispatcher("/jsp/patient.jsp").forward(request, response);
+        selected(request, response, db, Integer.parseInt(id));
     }
 
     public String getServletInfo() {

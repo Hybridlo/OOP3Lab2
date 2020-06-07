@@ -20,7 +20,9 @@
     <%
         List<Object> patients = (List<Object>) request.getAttribute("people");
         for (Object person : patients)
-            out.println("<p>" + person.toString() +"</p>");
+            out.println("<p style=\"font-size: 18\">" + person.toString() +"</p>");
     %>
+
+    <a href="./">Go back</a>
 </body>
 </html>
