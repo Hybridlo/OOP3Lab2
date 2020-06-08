@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 class DBManagerTest {
     private DBManager db = DBManager.getInstance();
@@ -138,5 +139,111 @@ class DBManagerTest {
         assertEquals("", patient.sickness);
         assertEquals("", patient.treatment);
         assertEquals("WasSick", patient.sicknessHistory);
+    }
+
+    @Test
+    void getAllPatients() {
+        List<Patient> patients = db.getAllPatients();
+
+        for (int i = 1; i <= 40; i++) {
+            int expPatientId = i;
+            String expPatientName = "Name" + ((i > 20) ? i - 20 : i);
+            boolean expPatientIsSick = false;
+            String expPatientSickness = "";
+            String expPatientTreatment = "";
+            String expPatientSicknessHistory = null;
+
+            for (Patient patient : patients) {
+                if (patient.id == expPatientId) {
+                    assertEquals(expPatientId, patient.id);
+                    assertEquals(expPatientIsSick, patient.isSick);
+                    assertEquals(expPatientName, patient.name);
+                    assertEquals(expPatientSickness, patient.sickness);
+                    assertEquals(expPatientTreatment, patient.treatment);
+                    assertEquals(expPatientSicknessHistory, patient.sicknessHistory);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    void testGetAllNurses() {
+        List<Nurse> nurses = db.getAllNurses();
+
+        for (int i = 1; i <= 3; i++) {
+            int expNurseId = i;
+            String expNurseName = "Nurse" + i;
+
+            for (Nurse nurse: nurses) {
+                if (nurse.id == expNurseId) {
+                    assertEquals(expNurseId, nurse.id);
+                    assertEquals(expNurseName, nurse.name);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    void testGetAllDoctors() {
+        List<Doctor> doctors = db.getAllDoctors();
+
+        for (int i = 1; i <= 1; i++) {      //one doctor in db
+            int expDoctorId = i;
+            String expDoctorName = "Doctor" + i;
+
+            for (Doctor doctor: doctors) {
+                if (doctor.id == expDoctorId) {
+                    assertEquals(expDoctorId, doctor.id);
+                    assertEquals(expDoctorName, doctor.name);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    void testGetSickPatientsEmpty() {
+        List<Patient> patients = db.getSickPatients();
+
+        assertEquals(0, patients.size());
+    }
+
+    @Test
+    void testGetSickPatients() {
+        db.editPatient(3, null, true, null, null, null);
+        db.editPatient(15, null, true, null, null, null);
+        db.editPatient(28, null, true, null, null, null);
+
+        List<Patient> patients = db.getSickPatients();
+
+        assertEquals(3, patients.size());
+
+        for (Patient patient : patients) {
+            assertTrue(patient.isSick);
+        }
+    }
+
+    @Test
+    void testGetPatientsToTreatEmpty() {
+        List<Patient> patients = db.getPatientsToTreat();
+
+        assertEquals(0, patients.size());
+    }
+
+    @Test
+    void testGetPatientsToTreat() {
+        db.editPatient(3, null, true, null, "A", null);
+        db.editPatient(15, null, true, null, "B", null);
+        db.editPatient(28, null, true, null, "C", null);
+
+        List<Patient> patients = db.getPatientsToTreat();
+
+        assertEquals(3, patients.size());
+
+        for (Patient patient : patients) {
+            assertTrue(patient.treatment != null && !patient.treatment.equals(""));
+        }
     }
 }
